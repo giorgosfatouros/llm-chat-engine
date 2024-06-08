@@ -11,36 +11,40 @@ from llama_index.llms.openai import OpenAI
 
 from app.engine.constants import STORAGE_DIR, MODEL
 from app.engine.context import create_service_context
+from app.__init__ import individual_query_engine_tools
+
+
+ #service context??? ????????????????????????????????????/
+
 
 
 def get_chat_engine():
-    individual_query_engine_tools = []
     service_context = create_service_context()
-    # check if storage already exists
-    if not os.path.exists(STORAGE_DIR):
-        raise Exception(
-            "StorageContext is empty - call 'python app/engine/generate.py' to generate the storage first"
-        )
-    logger = logging.getLogger("uvicorn")
-    # load the existing index
-    logger.info(f"Loading index from {STORAGE_DIR}...")
-    storage_context = StorageContext.from_defaults(persist_dir=STORAGE_DIR)
-    index = load_index_from_storage(storage_context, service_context=service_context)
-    logger.info(f"Finished loading index from {STORAGE_DIR}")
-    query_engine_tool = QueryEngineTool(
-        query_engine=index.as_query_engine(),
-        metadata=ToolMetadata(
-            name="Routers",
-            description="Provides specific technical information about Cisco ME4924-10E SW and Juniper EX9204 SW",
-        )
-        # metadata=ToolMetadata(
-        #     name=filename,
-        #     description=(f'Document type is {doc_type}. Manufacturer is {manufacturer}. '
-        #                  f'Document name is {doc_title}')
-        # )
-    )
-
-    individual_query_engine_tools.append(query_engine_tool)
+    # # check if storage already exists
+    # if not os.path.exists(STORAGE_DIR):
+    #     raise Exception(
+    #         "StorageContext is empty - call 'python app/engine/generate.py' to generate the storage first"
+    #     )
+    # logger = logging.getLogger("uvicorn")
+    # # load the existing index
+    # logger.info(f"Loading index from {STORAGE_DIR}...")
+    # storage_context = StorageContext.from_defaults(persist_dir=STORAGE_DIR)
+    # index = load_index_from_storage(storage_context, service_context=service_context)
+    # logger.info(f"Finished loading index from {STORAGE_DIR}")
+    # query_engine_tool = QueryEngineTool(
+    #     query_engine=index.as_query_engine(),
+    #     metadata=ToolMetadata(
+    #         name="Routers",
+    #         description="Provides specific technical information about Cisco ME4924-10E SW and Juniper EX9204 SW",
+    #     )
+    #     # metadata=ToolMetadata(
+    #     #     name=filename,
+    #     #     description=(f'Document type is {doc_type}. Manufacturer is {manufacturer}. '
+    #     #                  f'Document name is {doc_title}')
+    #     # )
+    # )
+    #
+    # individual_query_engine_tools.append(query_engine_tool)
     agent = OpenAIAgent.from_tools(
         individual_query_engine_tools, llm=OpenAI(model=MODEL, temperature=0.1,
                                                   system_prompt="You are an AI specialized in Industrial 5.0 maintenance practices, including machinery optimization and "

@@ -10,6 +10,7 @@ packages = [{include = "llm_chat_engine"}]
 python = "^3.11"
 fastapi = "^0.111.0"
 llama-index = "^0.10.41"
+python-dotenv = "^1.0.1"
 
 
 [build-system]

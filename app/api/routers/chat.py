@@ -9,6 +9,7 @@ from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core import ChatPromptTemplate
 from pydantic import BaseModel
 
+
 chat_router = r = APIRouter()
 
 
