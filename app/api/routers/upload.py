@@ -1,13 +1,8 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException, APIRouter, Form
-from fastapi.responses import JSONResponse
 from llama_index.embeddings.openai import OpenAIEmbedding
-
 from llama_index.core import StorageContext, VectorStoreIndex, SimpleDirectoryReader
 from llama_index.core.storage.index_store import SimpleIndexStore
-from llama_index.core.vector_stores import SimpleVectorStore
 from llama_index.core.tools import QueryEngineTool, ToolMetadata
-from llama_index.agent.openai import OpenAIAgent
-from llama_index.llms.openai import OpenAI
 from llama_index.readers.smart_pdf_loader import SmartPDFLoader
 import logging
 import shutil
@@ -82,9 +77,3 @@ async def upload_document(
     for tool in individual_query_engine_tools:
         logger.info(f"Tool name: {tool.metadata.name}, description: {tool.metadata.description}")
 
-    # query_engine = index.as_query_engine()
-    # response = query_engine.query(f"What is {collection_name} document about ?")
-
-# Ensure to include this router in your main app
-# In your main.py, you would add the following line
-# app.include_router(upload_router, prefix="/api/upload")

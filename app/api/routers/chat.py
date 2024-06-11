@@ -1,16 +1,20 @@
 from typing import List
-
+import logging
 from fastapi.responses import StreamingResponse
 from llama_index.core.chat_engine.types import BaseChatEngine
-
-from app.engine.index import get_chat_engine
+from app.engine.index import get_chat_engine, show_user_input, show_response
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from llama_index.core.llms import ChatMessage, MessageRole
 from llama_index.core import ChatPromptTemplate
 from pydantic import BaseModel
 
+history_messages = []
+
+logger = logging.getLogger("uvicorn")
 
 chat_router = r = APIRouter()
+
+agent = get_chat_engine()
 
 
 class _Message(BaseModel):
@@ -24,9 +28,8 @@ class _ChatData(BaseModel):
 
 @r.post("")
 async def chat(
-    request: Request,
-    data: _ChatData,
-    chat_engine: BaseChatEngine = Depends(get_chat_engine),
+        request: Request,
+        data: _ChatData,
 ):
     # check preconditions and get last message
     if len(data.messages) == 0:
@@ -40,17 +43,19 @@ async def chat(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Last message must be from user",
         )
-    # convert messages coming from the request to type ChatMessage
-    messages = [
-        ChatMessage(
-            role=m.role,
-            content=m.content,
-        )
-        for m in data.messages
-    ]
 
-    # query chat engine
-    response = await chat_engine.astream_chat(lastMessage.content, messages)
+    # await show_user_input(session_id, lastMessage.content)
+    # logger.info(f"history_messages before sent {history_messages}")
+
+    # ask agent
+    response = await agent.astream_chat(lastMessage.content, history_messages)
+
+    # add message to history
+    history_messages.append(ChatMessage(role='user', content=lastMessage.content))
+
+    logger.info(f"history_messages after sent {history_messages}")
+
+    # await show_response(session_id, response)
 
     # stream response
     async def event_generator():
