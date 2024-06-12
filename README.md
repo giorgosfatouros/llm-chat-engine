@@ -17,19 +17,27 @@ Example `.env` file:
 OPENAI_API_KEY=<openai_api_key>
 ```
 
-Second, generate the embeddings of the documents in the `./data` directory (if this folder exists - otherwise, skip this step):
-
-```
-python app/engine/generate.py
-```
-
-Third, run the development server:
+Second, run the development server:
 
 ```
 python main.py
 ```
 
-Then call the API endpoint `/api/chat` to see the result:
+Third, upload any PDF document/manual that you would like to test your chat with
+making sure you provide the document type, document title, the document's author/ manual's manufacturer like so:
+
+```
+ curl -X 'POST'   'http://0.0.0.0:8000/api/upload/upload_document/' 
+  -H 'accept: application/json'
+  -H 'Content-Type: multipart/form-data'  
+  -F 'doc_type = example_manual'  
+  -F 'manufacturer = example_Cisco'  
+  -F 'doc_title = example_Series'
+  -F 'uploaded_file=@/home/user/Documents/example.pdf'
+
+```
+
+Then call the API endpoint `/api/chat` to chat:
 
 ```
 curl --location 'localhost:8000/api/chat' \
