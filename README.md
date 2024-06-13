@@ -63,7 +63,7 @@ python main.py
 Upload any PDF document/manual that you would like to test your chat with
 making sure you provide the document type, document title, the document's author/ manual's manufacturer like so:
 
-```
+```bash
  curl -X 'POST'   'http://0.0.0.0:8000/api/upload/upload_document/' 
   -H 'accept: application/json'
   -H 'Content-Type: multipart/form-data'  
@@ -76,15 +76,17 @@ making sure you provide the document type, document title, the document's author
 
 Then call the API endpoint `/api/chat` to chat:
 
-```
+```bash
 curl --location 'localhost:8000/api/chat' \
 --header 'Content-Type: application/json' \
 --data '{ "messages": [{ "role": "user", "content": "Hello" }] }'
 ```
 
+
+
 You can start editing the API by modifying `app/api/routers/chat.py`. The endpoint auto-updates as you save the file.
 
-Open [http://localhost:8000/docs](http://localhost:8000/docs) with your browser to see the Swagger UI of the API.
+Open [http://localhost:8000/api/docs](http://localhost:8000/docs) with your browser to see the Swagger UI of the API.
 
 The API allows CORS for all origins to simplify development. You can change this behavior by setting the `ENVIRONMENT` environment variable to `prod`:
 
