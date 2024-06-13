@@ -1087,6 +1087,36 @@ llama-index-core = ">=0.10.7,<0.11.0"
 llama-parse = ">=0.4.0,<0.5.0"
 
 [[package]]
+name = "llama-index-readers-smart-pdf-loader"
+version = "0.1.4"
+description = "llama-index readers smart_pdf_loader integration"
+optional = false
+python-versions = "<4.0,>=3.8.1"
+files = [
+    {file = "llama_index_readers_smart_pdf_loader-0.1.4-py3-none-any.whl", hash = "sha256:ba21a0ba8b46cd5a5f1205b4601147e469dccccac57de2902cab44794047f57a"},
+    {file = "llama_index_readers_smart_pdf_loader-0.1.4.tar.gz", hash = "sha256:40b135750612b175eea16297749946a82238776b398683fc6b1a605e7208300d"},
+]
+
+[package.dependencies]
+llama-index-core = ">=0.10.1,<0.11.0"
+llmsherpa = ">=0.1.4,<0.2.0"
+
+[[package]]
+name = "llama-index-storage-chat-store-redis"
+version = "0.1.3"
+description = "llama-index storage-chat-store redis integration"
+optional = false
+python-versions = "<4.0,>=3.8.1"
+files = [
+    {file = "llama_index_storage_chat_store_redis-0.1.3-py3-none-any.whl", hash = "sha256:a8bd1d049280ebff513f12aa7475e13d5adc094ca7918887cecb97aa7e9ac771"},
+    {file = "llama_index_storage_chat_store_redis-0.1.3.tar.gz", hash = "sha256:5acf2eb426ae7abc3c6be0d1303f5443b57b59ca0c594b05adf74986fb398c36"},
+]
+
+[package.dependencies]
+llama-index-core = ">=0.10.11.post1,<0.11.0"
+redis = ">=4.1.0"
+
+[[package]]
 name = "llama-index-vector-stores-redis"
 version = "0.2.0"
 description = "llama-index vector_stores redis integration"
@@ -1129,6 +1159,20 @@ files = [
 [package.dependencies]
 httpx = ">=0.20.0"
 pydantic = ">=1.10"
+
+[[package]]
+name = "llmsherpa"
+version = "0.1.4"
+description = "Strategic APIs to Accelerate LLM Use Cases"
+optional = false
+python-versions = "*"
+files = [
+    {file = "llmsherpa-0.1.4-py3-none-any.whl", hash = "sha256:88a651eacf221a997a9a9795903fbb70ddb211cd2e82831507de01284c917667"},
+    {file = "llmsherpa-0.1.4.tar.gz", hash = "sha256:18789840ded3d7e37db6a5c668dac2b0a58f20e426beaed3e60554dee0a5ecb0"},
+]
+
+[package.dependencies]
+urllib3 = "*"
 
 [[package]]
 name = "markdown-it-py"
@@ -2981,4 +3025,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "6a90135a253d331d27ef089d12beb24ecfe5065a4cd6be2cabf147a90da6355f"
+content-hash = "2a8c6800bc794fb4e75066d7ad02fecdfcaab6be6b31a6b840775828030dde23"

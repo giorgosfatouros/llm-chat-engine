@@ -36,8 +36,9 @@ cd llm-chat-engine.
 2. Set up the virtual environment and dependencies:
 
 ```bash
-python -m venv chat
-source chat/bin/activate
+conda create -n chat python=3.11
+conda activate chat
+
 poetry install
 poetry shell
 ```
@@ -64,7 +65,7 @@ Upload any PDF document/manual that you would like to test your chat with
 making sure you provide the document type, document title, the document's author/ manual's manufacturer like so:
 
 ```bash
- curl -X 'POST'   'http://0.0.0.0:8000/api/upload/upload_document/' 
+ curl -X 'POST' 'http://0.0.0.0:8000/api/upload/upload_document/' 
   -H 'accept: application/json'
   -H 'Content-Type: multipart/form-data'  
   -F 'doc_type = example_manual'  
@@ -94,6 +95,18 @@ The API allows CORS for all origins to simplify development. You can change this
 ENVIRONMENT=prod uvicorn main:app
 ```
 
+## Docker Setup
+
+1. Build the Docker image:
+```bash
+docker build -t llm-chat-engine .
+```
+2. Run the Docker container:
+
+```bash
+docker run -p 8000:8000 llm-chat-engine
+```
+
 ## Learn More
 
 To learn more about LlamaIndex, take a look at the following resources:
@@ -101,3 +114,12 @@ To learn more about LlamaIndex, take a look at the following resources:
 - [LlamaIndex Documentation](https://docs.llamaindex.ai) - learn about LlamaIndex.
 
 You can check out [the LlamaIndex GitHub repository](https://github.com/run-llama/llama_index) - your feedback and contributions are welcome!
+
+
+ curl -X 'POST'   'http://0.0.0.0:8000/api/upload/upload_document/' 
+  -H 'accept: application/json'
+  -H 'Content-Type: multipart/form-data'  
+  -F 'doc_type = example_manual'  
+  -F 'manufacturer = example_Cisco'  
+  -F 'doc_title = example_Series'
+  -F 'uploaded_file=@/home/user/Documents/example.pdf'
