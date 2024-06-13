@@ -1,4 +1,4 @@
-# LLM-Driven Industrial Maintenance Chatbot
+# LLM-Driven Industrial Maintenance Chatbot Assistant 
 ## Project Description
 This project is designed to develop an AI-driven chatbot specialized in Industrial 5.0 maintenance practices, including
 machinery optimization and process efficiency. The chatbot leverages OpenAI's GPT model for natural 
