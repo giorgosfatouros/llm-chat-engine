@@ -1,29 +1,66 @@
-This is a [LlamaIndex](https://www.llamaindex.ai/) project using [FastAPI](https://fastapi.tiangolo.com/) bootstrapped with [`create-llama`](https://github.com/run-llama/LlamaIndexTS/tree/main/packages/create-llama).
+# LLM-Driven Industrial Maintenance Chatbot
+## Project Description
+This project is designed to develop an AI-driven chatbot specialized in Industrial 5.0 maintenance practices, including
+machinery optimization and process efficiency. The chatbot leverages OpenAI's GPT model for natural 
+language understanding and responses, along with specialized tools for querying maintenance manuals and 
+documents.
 
-## Getting Started
+## Key Features
+ - **Industrial Maintenance Expertise:** The chatbot is tailored to provide precise and accurate responses related to industrial machinery maintenance and process efficiency.
+ - **Document Upload and Indexing:** Users can upload maintenance manuals and documents, which are then processed and indexed for querying.
+ - **Contextual Conversation:** Maintains context from previous interactions to ensure coherent and relevant responses.
+ - **Real-time Streaming Responses:** Provides real-time streaming of responses for a seamless user experience.
 
-First, set up the environment:
+## Files and Directories
+ - main.py: Entry point for the application.
+ - Dockerfile: Docker configuration for containerizing the application.
+ - pyproject.toml: Configuration file for managing project dependencies and metadata.
+ - app/
+   - api/
+     - routers/
+       - chat.py: Defines the API routes for interacting with the chat engine.
+       - upload.py: API routes for uploading and processing documents.
+   - engine/
+     - context.py: Contains functions for setting up the service context, including language models and embedding models.
+     - constants.py: Defines constants used throughout the application.
+     - index.py: Handles the creation and management of the OpenAIAgent and its tools, including the chat engine.
 
+## Installation and Setup
+
+1. Clone the repository:
+```bash
+git clone https://github.com/giorgosfatouros/llm-chat-engine.git
+cd llm-chat-engine.
 ```
+
+2. Set up the virtual environment and dependencies:
+
+```bash
+python -m venv chat
+source chat/bin/activate
 poetry install
 poetry shell
 ```
-
-By default, we use the OpenAI LLM (though you can customize, see `app/context.py`). As a result you need to specify an `OPENAI_API_KEY` in an .env file in this directory.
-
-Example `.env` file:
-
-```
-OPENAI_API_KEY=<openai_api_key>
+3. Set up environment variables:
+Create a .env file in the project root directory and add your OpenAI API key:
+```python
+OPENAI_API_KEY="<your_openai_api_key>"
 ```
 
-Second, run the development server:
+4. Run the application:
+
+```bash
+uvicorn main:app --reload
+```
+or 
 
 ```
 python main.py
 ```
 
-Third, upload any PDF document/manual that you would like to test your chat with
+## Usage
+
+Upload any PDF document/manual that you would like to test your chat with
 making sure you provide the document type, document title, the document's author/ manual's manufacturer like so:
 
 ```
