@@ -61,15 +61,15 @@ python main.py
 
 ## Usage
 
-Upload any PDF document/manual that you would like to test your chat with
-making sure you provide the document type, document title, the document's author/ manual's manufacturer like so:
+Upload any PDF document/manual that you would like to test your chat with.
+Make sure you provide the document type (One word without underscore), the document's author/ manual's manufacturer (One word without underscore) and the document's title (As many words as you like seperated by underscores) like so:
 
 ```bash
  curl -X 'POST' 'http://0.0.0.0:8000/api/upload/upload_document/' 
   -H 'accept: application/json'
   -H 'Content-Type: multipart/form-data'  
-  -F 'doc_type = example_manual'  
-  -F 'manufacturer = example_Cisco'  
+  -F 'doc_type = expl(Manual)'  
+  -F 'manufacturer = exmpl(Cisco)'  
   -F 'doc_title = example_Series'
   -F 'uploaded_file=@/home/user/Documents/example.pdf'
 
