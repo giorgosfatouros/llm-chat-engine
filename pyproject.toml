@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["George Fatouros <gfatouros@innov-acts.com>"]
 readme = "README.md"
-packages = [{include = "llm_chat_engine"}]
+packages = [{include = "app"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"

@@ -1,23 +1,21 @@
-FROM ubuntu:latest
-LABEL authors="despina"
+FROM python:3.11-slim
 
-ENTRYPOINT ["top", "-b"]
-
-FROM python:3.9-slim
-
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-COPY requirements.txt /app/
+COPY . /app
 
-RUN pip install --no-cache-dir -r requirements.txt
+# Install Poetry
+RUN pip install poetry
 
+# Configure Poetry:
+# - Do not create a virtual environment inside the container
+# - Install only package dependencies (skip dev-dependencies)
+RUN poetry config virtualenvs.create false
+RUN poetry install --no-dev -vvv
 
-COPY . /app/
-
+# Set environment variables
+ENV OPENAI_API_KEY="sk-proj-JZm15xUo65pLTIFrX0lOT3BlbkFJ5AaO3MI3OF3c1C6sdJtM"
 
 EXPOSE 8000
 
