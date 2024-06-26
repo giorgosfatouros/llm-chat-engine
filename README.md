@@ -33,31 +33,21 @@ git clone https://github.com/giorgosfatouros/llm-chat-engine.git
 cd llm-chat-engine.
 ```
 
-2. Set up the virtual environment and dependencies:
+2. Put your OpenAI API key in the Dockerfile and docker-compose.yml
+
+3. Build the Docker image:
+```bash
+docker build -t llm-chat-engine .
+```
+
+4. Delete the .gitkeep files in ./data and ./vector-store directories
+
+5. Run the Docker container:
 
 ```bash
-conda create -n chat python=3.11
-conda activate chat
-
-poetry install
-poetry shell
-```
-3. Set up environment variables:
-Create a .env file in the project root directory and add your OpenAI API key:
-```python
-OPENAI_API_KEY="<your_openai_api_key>"
+docker run -p 8000:8000 llm-chat-engine
 ```
 
-4. Run the application:
-
-```bash
-uvicorn main:app --reload
-```
-or 
-
-```
-python main.py
-```
 
 ## Usage
 
@@ -93,18 +83,6 @@ The API allows CORS for all origins to simplify development. You can change this
 
 ```
 ENVIRONMENT=prod uvicorn main:app
-```
-
-## Docker Setup
-
-1. Build the Docker image:
-```bash
-docker build -t llm-chat-engine .
-```
-2. Run the Docker container:
-
-```bash
-docker run -p 8000:8000 llm-chat-engine
 ```
 
 ## Learn More
