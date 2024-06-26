@@ -37,15 +37,13 @@ cd llm-chat-engine.
 
 3. Build the Docker image:
 ```bash
-docker build -t llm-chat-engine .
+docker build -t llm-engine .
 ```
 
-4. Delete the .gitkeep files in ./data and ./vector-store directories
-
-5. Run the Docker container:
+5. Run the Docker service:
 
 ```bash
-docker run -p 8000:8000 llm-chat-engine
+docker-compose up
 ```
 
 
