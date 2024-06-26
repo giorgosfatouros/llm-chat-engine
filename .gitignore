@@ -2,5 +2,3 @@ __pycache__
 storage
 .env
 .idea
-data
-vector_store
