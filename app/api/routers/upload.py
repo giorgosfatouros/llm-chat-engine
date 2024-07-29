@@ -6,6 +6,7 @@ from llama_index.core.tools import QueryEngineTool, ToolMetadata
 from llama_index.readers.smart_pdf_loader import SmartPDFLoader
 import logging
 import shutil
+import requests
 from app.engine.context import create_service_context
 
 from app.__init__ import individual_query_engine_tools
@@ -23,6 +24,7 @@ router = APIRouter()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+logger.info("inside upload.py")
 
 @router.post("/upload_document/")
 async def upload_document(
@@ -31,6 +33,7 @@ async def upload_document(
         doc_title: str = Form(...),
         uploaded_file: UploadFile = File(...)
 ):
+    logger.info("inside upload.py/method")
     collection_name = f"{doc_type}_{manufacturer}_{doc_title}"
     collection_name = collection_name[:63]
     collection_metadata = {'doc_type': doc_type, 'manufacturer': manufacturer, 'collection_name': collection_name}
@@ -41,8 +44,9 @@ async def upload_document(
 
     # Define the full file path
     file_path = os.path.join(target_dir, uploaded_file.filename)
-
+    logger.info(f"filename {uploaded_file.filename}")
     # Save the uploaded file
+    logger.info(f"file: {uploaded_file.file}")
     with open(file_path, "wb") as f:
         shutil.copyfileobj(uploaded_file.file, f)
 
@@ -53,11 +57,24 @@ async def upload_document(
     pdf_loader = SmartPDFLoader(llmsherpa_api_url=llmsherpa_api_url)
 
     service_context = create_service_context()
-
-    docs = pdf_loader.load_data(file_path)
+    logger.info("after service context")
+    #docs = pdf_loader.load_data(file_path)
+    try:
+        logger.info(f"Loading data from file: {file_path}")
+        docs = pdf_loader.load_data(file_path)
+        logger.info("Data loaded successfully")
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Request failed: {e}")
+        raise
+    except Exception as e:
+        logger.error(f"An error occurred while loading data: {e}")
+        raise
+    logger.info("after load_data")
     index = VectorStoreIndex.from_documents(docs, storage_context=storage_context, embed_model=embed_model, service_context=service_context)
+    logger.info("after index creation")
     index.storage_context.persist(persist_dir=f"./vector_store/{collection_name}")
-
+    logger.info("after index persist")
+    logger.info(f"{individual_query_engine_tools}")
     for query_engine_tool in individual_query_engine_tools:
         if query_engine_tool.metadata.name == collection_name:
             # this_query_engine_tool = query_engine_tool

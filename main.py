@@ -15,6 +15,10 @@ from llama_index.core import load_index_from_storage
 from llama_index.core import StorageContext
 from app.__init__ import individual_query_engine_tools
 from app.engine.context import create_service_context
+from llama_index.storage.chat_store.redis import RedisChatStore
+
+redis_url = os.getenv("REDIS_URL", "redis://localhost:6379")
+chat_store = RedisChatStore(redis_url=redis_url, ttl=300)
 
 load_dotenv()  # Load environment variables from a .env file
 openai_api_key = os.getenv('OPENAI_API_KEY')
@@ -35,6 +39,8 @@ if environment == "dev":
         allow_methods=["*"],
         allow_headers=["*"],
     )
+
+logger.info("inside main")
 
 service_context = create_service_context()
 
@@ -63,6 +69,32 @@ if not individual_query_engine_tools:
             )
 
             individual_query_engine_tools.append(this_query_engine_tool)
+# Add test endpoint for Redis
+@app.get("/test-redis")
+async def test_redis():
+    redis_url = os.getenv("REDIS_URL", "redis://redis:6379")
+    chat_store = RedisChatStore(redis_url=redis_url, ttl=300)
+    try:
+        chat_store.redis_client.set("test_key", "test_value")
+        value = chat_store.redis_client.get("test_key")
+        return {"test_key": value.decode("utf-8")}
+    except Exception as e:
+        return {"error": str(e)}
+
+# Add test endpoint for OpenAI
+@app.get("/test-openai")
+async def test_openai():
+    try:
+        response = await openai.ChatCompletion.acreate(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": "This is a test."}
+            ]
+        )
+        return {"response": response.choices[0].message['content']}
+    except Exception as e:
+        return {"error": str(e)}
 
 if environment == "dev":
     logger = logging.getLogger("uvicorn")
@@ -72,6 +104,7 @@ if environment == "dev":
 
 app.include_router(chat_router, prefix="/api/chat")
 app.include_router(upload_router, prefix="/api/upload")
+
 
 if __name__ == "__main__":
     uvicorn.run(app="main:app", host="0.0.0.0", reload=True)

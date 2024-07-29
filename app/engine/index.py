@@ -14,7 +14,8 @@ from app.__init__ import individual_query_engine_tools
 from llama_index.core.memory import ChatMemoryBuffer
 from llama_index.storage.chat_store.redis import RedisChatStore
 
-chat_store = RedisChatStore(redis_url="redis://redis:6379", ttl=300)
+redis_url = os.getenv("REDIS_URL", "redis://localhost:6379")
+chat_store = RedisChatStore(redis_url=redis_url, ttl=300)
 
 logger = logging.getLogger("uvicorn")
 

@@ -1,6 +1,5 @@
 FROM python:3.11-slim
 
-
 WORKDIR /app
 
 COPY . /app
@@ -15,7 +14,7 @@ RUN poetry config virtualenvs.create false
 RUN poetry install --no-dev -vvv
 
 # Set environment variables
-ENV OPENAI_API_KEY="your-key"
+ENV OPENAI_API_KEY="sk-proj-JZm15xUo65pLTIFrX0lOT3BlbkFJ5AaO3MI3OF3c1C6sdJtM"
 
 EXPOSE 8000
 
