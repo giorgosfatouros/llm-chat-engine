@@ -12,9 +12,11 @@ RUN pip install poetry
 # - Install only package dependencies (skip dev-dependencies)
 RUN poetry config virtualenvs.create false
 RUN poetry install --no-dev -vvv
+RUN pip install llama_index
+
 
 # Set environment variables
-ENV OPENAI_API_KEY="sk-proj-JZm15xUo65pLTIFrX0lOT3BlbkFJ5AaO3MI3OF3c1C6sdJtM"
+ENV OPENAI_API_KEY="your_key"
 
 EXPOSE 8000
 

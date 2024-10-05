@@ -53,26 +53,34 @@ async def upload_document(
     embed_model = OpenAIEmbedding()
     storage_context = StorageContext.from_defaults(index_store=SimpleIndexStore())
 
-    llmsherpa_api_url = "https://readers.llmsherpa.com/api/document/developer/parseDocument?renderFormat=all"
-    pdf_loader = SmartPDFLoader(llmsherpa_api_url=llmsherpa_api_url)
+    # llmsherpa_api_url = "https://readers.llmsherpa.com/api/document/developer/parseDocument?renderFormat=all"
+    # pdf_loader = SmartPDFLoader(llmsherpa_api_url=llmsherpa_api_url)
 
     service_context = create_service_context()
     logger.info("after service context")
     #docs = pdf_loader.load_data(file_path)
     try:
         logger.info(f"Loading data from file: {file_path}")
-        docs = pdf_loader.load_data(file_path)
-        logger.info("Data loaded successfully")
-    except requests.exceptions.RequestException as e:
-        logger.error(f"Request failed: {e}")
-        raise
+        reader = SimpleDirectoryReader(input_dir=os.path.dirname(file_path))
+        docs = reader.load_data()
+        logger.info(f"Data loaded successfully")
     except Exception as e:
         logger.error(f"An error occurred while loading data: {e}")
-        raise
-    logger.info("after load_data")
-    index = VectorStoreIndex.from_documents(docs, storage_context=storage_context, embed_model=embed_model, service_context=service_context)
-    logger.info("after index creation")
-    index.storage_context.persist(persist_dir=f"./vector_store/{collection_name}")
+        raise HTTPException(status_code=500, detail=f"Failed to load data from the document: {str(e)}")
+
+    try:
+        index = VectorStoreIndex.from_documents(docs, storage_context=storage_context, embed_model=embed_model,
+                                                service_context=service_context)
+        logger.info("after index creation")
+        index.storage_context.persist(persist_dir=f"./vector_store/{collection_name}")
+        logger.info(
+            f"after index persist, checking contents of persist dir: {os.listdir(f'./vector_store/{collection_name}')} "
+            f"and index: {index}")
+    except Exception as e:
+        logger.error(f"An error occurred during indexing or persisting the data: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to index or persist the document: {str(e)}")
+
+
     logger.info("after index persist")
     logger.info(f"{individual_query_engine_tools}")
     for query_engine_tool in individual_query_engine_tools:

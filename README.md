@@ -63,6 +63,13 @@ Make sure you provide the document type (One word without underscore), the docum
 
 ```
 
+For Windows: 
+
+```bash
+ curl.exe -X POST "http://localhost:8000/api/upload/upload_document/" -H "accept: application/json" -F "doc_type=eg_Hardware_Installation_Guide" -F "manufacturer=eg_Cisco" -F "doc_title=eg_ME_4924-10GE_Ethernet_Switch" -F "uploaded_file=@C:\Users\Downloads\me492410ge.pdf"
+
+```
+
 Then call the API endpoint `/api/chat` to chat:
 
 ```bash
@@ -71,6 +78,13 @@ curl --location 'localhost:8000/api/chat' \
 --data '{ "messages": [{ "role": "user", "content": "Hello" }] }'
 ```
 
+For Windows: 
+
+```bash
+
+ curl.exe --location "http://localhost:8000/api/chat" --header "Content-Type: application/json" --data '{\"messages\":[{\"role\": \"user\", \"content\": \"Hello, can you help me?\"}]}'
+
+```
 
 
 You can start editing the API by modifying `app/api/routers/chat.py`. The endpoint auto-updates as you save the file.
