@@ -85,7 +85,7 @@ async def upload_document(
     logger.info(f"{individual_query_engine_tools}")
     for query_engine_tool in individual_query_engine_tools:
         if query_engine_tool.metadata.name == collection_name:
-            # this_query_engine_tool = query_engine_tool
+            this_query_engine_tool = query_engine_tool
             break
     else:
         this_query_engine_tool = QueryEngineTool(

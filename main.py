@@ -4,12 +4,14 @@ import logging
 import os
 import uvicorn
 from app.api.routers.chat import chat_router
+from app.api.routers.reset import reset_router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
 import openai
 from app.api.routers.upload import router as upload_router
+
 from llama_index.core.tools import QueryEngineTool, ToolMetadata
 from llama_index.core import load_index_from_storage
 from llama_index.core import StorageContext
@@ -104,6 +106,7 @@ if environment == "dev":
 
 app.include_router(chat_router, prefix="/api/chat")
 app.include_router(upload_router, prefix="/api/upload")
+app.include_router(reset_router, prefix="/api/chat/reset")
 
 
 if __name__ == "__main__":

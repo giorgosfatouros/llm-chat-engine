@@ -14,6 +14,7 @@ from app.__init__ import individual_query_engine_tools
 from llama_index.core.memory import ChatMemoryBuffer
 from llama_index.storage.chat_store.redis import RedisChatStore
 
+
 redis_url = os.getenv("REDIS_URL", "redis://localhost:6379")
 chat_store = RedisChatStore(redis_url=redis_url, ttl=300)
 
@@ -25,19 +26,11 @@ chat_memory = ChatMemoryBuffer.from_defaults(
     chat_store=chat_store,
     chat_store_key="user1",
 )
-
+with open('app/engine/system_prompt.md', 'r') as file:
+    base_prompt = file.read()
 agent = OpenAIAgent.from_tools(
-    individual_query_engine_tools, llm=OpenAI(model=MODEL, temperature=0.1,
-                                              system_prompt="You are an AI specialized in Industrial 5.0 maintenance practices, including machinery optimization and "
-                                                            "process efficiency. Your tasks include:\n"
-                                                            "- Querying the appropriate engine tool to answer user questions based on the manuals in your database.\n"
-                                                            "- Using the entire user question or key phrases to find precise answers.\n"
-                                                            "- Identifying the page number in the manual when specifically asked about the location of information.\n"
-                                                            "- Handling user dissatisfaction by re-querying the engine tool to correct the answer.\n"
-                                                            "- Maintaining context from previous questions to ensure coherent conversations.\n"
-                                                            "Please provide concise, accurate, and relevant information in your responses. Ensure to handle ambiguous "
-                                                            "questions by requesting clarification. Always strive for accuracy and user satisfaction."
-                                              ),
+    individual_query_engine_tools, llm=OpenAI(model=MODEL, temperature=0.1),
+    system_prompt = base_prompt,
     verbose=True,
     memory=chat_memory
 )
