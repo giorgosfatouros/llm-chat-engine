@@ -20,6 +20,10 @@ agent = get_chat_engine()
 class _Message(BaseModel):
     role: MessageRole
     content: str
+    room: str
+    task_description: str
+    completed_tasks: str
+    remaining_tasks: str
 
 
 class _ChatData(BaseModel):
@@ -38,6 +42,15 @@ async def chat(
             detail="No messages provided",
         )
     lastMessage = data.messages.pop()
+
+    room = lastMessage.room
+    task_description = lastMessage.task_description
+    completed_tasks = lastMessage.completed_tasks
+    remaining_tasks = lastMessage.remaining_tasks
+    logger.info(f"room: {room} \
+        task_description: {task_description} \
+        completed_tasks: {completed_tasks} \
+        remaining_tasks: {remaining_tasks}")
     if lastMessage.role != MessageRole.USER:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -47,8 +60,10 @@ async def chat(
     # await show_user_input(session_id, lastMessage.content)
     # logger.info(f"history_messages before sent {history_messages}")
 
+    query = f"I am in the {room} room, working on {task_description} and have completed {completed_tasks}.{lastMessage.content} "
+
     # ask agent
-    response = await agent.astream_chat(lastMessage.content, history_messages)
+    response = await agent.astream_chat(query, history_messages)
 
     # add message to history
     history_messages.append(ChatMessage(role='user', content=lastMessage.content))

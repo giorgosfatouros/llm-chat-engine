@@ -16,7 +16,7 @@ RUN pip install llama_index
 
 
 # Set environment variables
-ENV OPENAI_API_KEY="your_key"
+ENV OPENAI_API_KEY=""
 
 EXPOSE 8000
 
