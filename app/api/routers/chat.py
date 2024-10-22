@@ -59,8 +59,11 @@ async def chat(
 
     # await show_user_input(session_id, lastMessage.content)
     # logger.info(f"history_messages before sent {history_messages}")
+    if completed_tasks == "":
+        query = f"I am in the {room} room and working on {task_description}.{lastMessage.content} "
+    else:
+        query = f"I am in the {room} room, working on {task_description} and have completed {completed_tasks}.{lastMessage.content} "
 
-    query = f"I am in the {room} room, working on {task_description} and have completed {completed_tasks}.{lastMessage.content} "
 
     # ask agent
     response = await agent.astream_chat(query, history_messages)

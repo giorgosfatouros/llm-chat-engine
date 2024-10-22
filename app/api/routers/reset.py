@@ -21,11 +21,8 @@ logger = logging.getLogger("uvicorn")
 
 class _Message(BaseModel):
     role: MessageRole
-    content: str
     room: str
-    task_description: str
-    completed_tasks: str
-    remaining_tasks: str
+    new_session: bool
 
 class _ChatData(BaseModel):
     messages: List[_Message]
@@ -36,22 +33,21 @@ async def reset(
         data: _ChatData,
 ):
     try:
-        # Clear Redis chat history
-        chat_store.delete_messages("user1")
-
+        last_message = data.messages.pop()
+        new_session = last_message.new_session
         # Reset agent memory
         agent = get_chat_engine()
+        if new_session:
+            chat_store.delete_messages("user1")
+            history_messages.clear()
+            logger.info(f"Reseted history: {history_messages} ")
 
-        history_messages.clear()
-        logger.info(f"Inside reset")
-
-        room = data.messages.pop().room
+        room =last_message.room
 
         question = f"Hello! I am in room {room}. What is the purpose of this room?"
 
         response = await agent.astream_chat(question, history_messages)
         # Stream the reset message
-        # stream response
         async def event_generator():
             async for token in response.async_response_gen():
                 # If client closes connection, stop sending events
